@@ -68,6 +68,8 @@ const inputElevation = document.querySelector('.form__input--elevation');
 const buttonMenu = document.querySelector('.button-menu');
 const container = document.querySelector('.container');
 const breakpointMd = 704;
+const formButtonSave = document.getElementById('form-btn-save');
+const formButtonCancel = document.getElementById('form-btn-cancel');
 
 buttonMenu.addEventListener('click', function () {
   container.classList.toggle('container--menu-open');
@@ -112,7 +114,7 @@ class App {
     console.log(position);
     const { latitude } = position.coords;
     const { longitude } = position.coords;
-    console.log(`https://www.google.com.br/maps/@${latitude},${longitude}z`);
+    // console.log(`https://www.google.com.br/maps/@${latitude},${longitude}z`);
 
     const coords = [latitude, longitude];
 
@@ -160,7 +162,17 @@ class App {
   _toggleElevationField() {
     inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
     inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+    formButtonSave.classList.toggle('btn--running');
+    formButtonSave.classList.toggle('btn--cycling');
+    formButtonCancel.classList.toggle('btn--running');
+    formButtonCancel.classList.toggle('btn--cycling');
   }
+
+  // _cancelWorkout(e) {
+  //   e.preventDefault();
+  //   formButtonCancel.closest('.form').classList.add('hidden');
+  //   console.log('cancel');
+  // }
 
   _newWorkout(e) {
     const validInputs = (...inputs) =>
@@ -221,6 +233,10 @@ class App {
     this._setLocalStorage();
   }
 
+  _newWorkoutClick() {
+    formButtonSave.addEventListener('click', App._newWorkout());
+  }
+
   _renderWorkoutMarker(workout) {
     // Display marker
     L.marker(workout.coords)
@@ -269,6 +285,11 @@ class App {
           <span class="workout__value">${workout.cadence}</span>
           <span class="workout__unit">spm</span>
         </div>
+        <button class="workout__btn btn btn--${
+          workout.type
+        } btn--secondary">Delete</button>
+        <button class="workout__btn btn btn--${workout.type}">Edit</button>
+        ${workout.id}
       </li>`;
     }
 
@@ -284,6 +305,11 @@ class App {
           <span class="workout__value">${workout.elevationGain}</span>
           <span class="workout__unit">m</span>
         </div>
+        <button class="workout__btn btn btn--${
+          workout.type
+        } btn--secondary">Delete</button>
+        <button class="workout__btn btn btn--${workout.type}">Edit</button>
+        ${workout.id}
       </li>`;
     }
 
@@ -292,14 +318,12 @@ class App {
 
   _moveToPopup(e) {
     const workoutEl = e.target.closest('.workout');
-    console.log(workoutEl);
 
     if (!workoutEl) return;
 
     const workout = this.#workouts.find(
       work => work.id === workoutEl.dataset.id
     );
-    console.log(workout);
 
     this.#map.setView(workout.coords, this.#mapZoomLevel, {
       animate: true,
