@@ -79,6 +79,22 @@ buttonMenu.addEventListener('click', function () {
 
 const cancelWorkout = function () {
   form.classList.add('hidden');
+  // Clear input fields
+  inputDistance.value =
+    inputDuration.value =
+    inputCadence.value =
+    inputElevation.value =
+      '';
+  // changig type ro running
+  if (inputType.value === 'cycling') {
+    inputType.value = 'running';
+    inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
+    inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+    formButtonSave.classList.toggle('btn--running');
+    formButtonSave.classList.toggle('btn--cycling');
+    formButtonCancel.classList.toggle('btn--running');
+    formButtonCancel.classList.toggle('btn--cycling');
+  }
 };
 
 formButtonCancel.addEventListener('click', cancelWorkout);
