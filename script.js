@@ -77,6 +77,18 @@ buttonMenu.addEventListener('click', function () {
   console.log(window.innerHeight);
 });
 
+const cancelWorkout = function () {
+  form.classList.add('hidden');
+};
+
+formButtonCancel.addEventListener('click', cancelWorkout);
+
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') {
+    cancelWorkout();
+  }
+});
+
 class App {
   // Private class field
   #map;
@@ -167,12 +179,6 @@ class App {
     formButtonCancel.classList.toggle('btn--running');
     formButtonCancel.classList.toggle('btn--cycling');
   }
-
-  // _cancelWorkout(e) {
-  //   e.preventDefault();
-  //   formButtonCancel.closest('.form').classList.add('hidden');
-  //   console.log('cancel');
-  // }
 
   _newWorkout(e) {
     const validInputs = (...inputs) =>
