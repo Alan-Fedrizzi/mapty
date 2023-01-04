@@ -71,12 +71,6 @@ const breakpointMd = 704;
 const formButtonSave = document.getElementById('form-btn-save');
 const formButtonCancel = document.getElementById('form-btn-cancel');
 
-buttonMenu.addEventListener('click', function () {
-  container.classList.toggle('container--menu-open');
-  console.log(window.innerWidth);
-  console.log(window.innerHeight);
-});
-
 class App {
   // Private class field
   #map;
@@ -101,6 +95,10 @@ class App {
     inputType.addEventListener('change', this._toggleElevationField);
 
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
+
+    buttonMenu.addEventListener('click', this._toggleMenuMobile.bind(this));
+
+    document.addEventListener('keydown', this._toggleMenuMobile.bind(this));
   }
 
   _getPosition() {
@@ -263,10 +261,10 @@ class App {
   }
 
   _cancelWorkoutEsc() {
-    formButtonCancel.addEventListener('click', App._cancelWorkout());
+    document.addEventListener('keydown', this._cancelWorkout.bind(this));
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
-        App.cancelWorkout();
+        App._cancelWorkout();
       }
     });
   }
@@ -391,6 +389,22 @@ class App {
   reset() {
     localStorage.removeItem('workouts');
     location.reload();
+  }
+
+  _toggleMenuMobile() {
+    container.classList.toggle('container--menu-open');
+  }
+
+  _menuMobileClick() {
+    buttonMenu.addEventListener('click', App._toggleMenuMobile());
+  }
+
+  _menuMobileEsc() {
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        App._toggleMenuMobile();
+      }
+    });
   }
 }
 
