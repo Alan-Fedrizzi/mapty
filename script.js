@@ -77,34 +77,6 @@ buttonMenu.addEventListener('click', function () {
   console.log(window.innerHeight);
 });
 
-const cancelWorkout = function () {
-  form.classList.add('hidden');
-  // Clear input fields
-  inputDistance.value =
-    inputDuration.value =
-    inputCadence.value =
-    inputElevation.value =
-      '';
-  // changig type ro running
-  if (inputType.value === 'cycling') {
-    inputType.value = 'running';
-    inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
-    inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
-    formButtonSave.classList.toggle('btn--running');
-    formButtonSave.classList.toggle('btn--cycling');
-    formButtonCancel.classList.toggle('btn--running');
-    formButtonCancel.classList.toggle('btn--cycling');
-  }
-};
-
-formButtonCancel.addEventListener('click', cancelWorkout);
-
-document.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape') {
-    cancelWorkout();
-  }
-});
-
 class App {
   // Private class field
   #map;
@@ -121,6 +93,10 @@ class App {
 
     // Attach event handlers
     form.addEventListener('submit', this._newWorkout.bind(this));
+
+    formButtonCancel.addEventListener('click', this._cancelWorkout.bind(this));
+
+    document.addEventListener('keydown', this._cancelWorkout.bind(this));
 
     inputType.addEventListener('change', this._toggleElevationField);
 
@@ -257,6 +233,42 @@ class App {
 
   _newWorkoutClick() {
     formButtonSave.addEventListener('click', App._newWorkout());
+  }
+
+  _cancelWorkout(e) {
+    e.preventDefault();
+    form.classList.add('hidden');
+    // Clear input fields
+    inputDistance.value =
+      inputDuration.value =
+      inputCadence.value =
+      inputElevation.value =
+        '';
+    // changing type ro running
+    if (inputType.value === 'cycling') {
+      inputType.value = 'running';
+      inputElevation
+        .closest('.form__row')
+        .classList.toggle('form__row--hidden');
+      inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+      formButtonSave.classList.toggle('btn--running');
+      formButtonSave.classList.toggle('btn--cycling');
+      formButtonCancel.classList.toggle('btn--running');
+      formButtonCancel.classList.toggle('btn--cycling');
+    }
+  }
+
+  _cancelWorkoutClick() {
+    formButtonCancel.addEventListener('click', App._cancelWorkout());
+  }
+
+  _cancelWorkoutEsc() {
+    formButtonCancel.addEventListener('click', App._cancelWorkout());
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        App.cancelWorkout();
+      }
+    });
   }
 
   _renderWorkoutMarker(workout) {
