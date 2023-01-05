@@ -70,6 +70,8 @@ const container = document.querySelector('.container');
 const breakpointMd = 704;
 const formButtonSave = document.getElementById('form-btn-save');
 const formButtonCancel = document.getElementById('form-btn-cancel');
+// const itemButtonDelete = document.getElementById('#item-btn-delete');
+// const itemButtonEdit = document.getElementById('item-btn-edit');
 
 class App {
   // Private class field
@@ -95,6 +97,10 @@ class App {
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
 
     buttonMenu.addEventListener('click', this._toggleMenuMobile.bind(this));
+
+    // itemButtonDelete.addEventListener('click', this._deleteWorkout.bind(this));
+
+    // itemButtonEdit.addEventListener('click', this.xxxxxxxxxxx.bind(this));
   }
 
   _getPosition() {
@@ -306,8 +312,10 @@ class App {
         </div>
         <button class="workout__btn btn btn--${
           workout.type
-        } btn--secondary">Delete</button>
-        <button class="workout__btn btn btn--${workout.type}">Edit</button>
+        } btn--secondary" id="item-btn-delete">Delete</button>
+        <button class="workout__btn btn btn--${
+          workout.type
+        }" id="item-btn-edit">Edit</button>
         ${workout.id}
       </li>`;
     }
@@ -326,8 +334,10 @@ class App {
         </div>
         <button class="workout__btn btn btn--${
           workout.type
-        } btn--secondary">Delete</button>
-        <button class="workout__btn btn btn--${workout.type}">Edit</button>
+        } btn--secondary" id="item-btn-delete">Delete</button>
+        <button class="workout__btn btn btn--${
+          workout.type
+        }" id="item-btn-edit">Edit</button>
         ${workout.id}
       </li>`;
     }
@@ -367,6 +377,8 @@ class App {
     // restore the workouts
     this.#workouts = data;
 
+    console.log(this.#workouts);
+
     // render the workouts in the list
     this.#workouts.forEach(work => {
       this._renderWorkout(work);
@@ -385,6 +397,16 @@ class App {
   _menuMobileClick() {
     buttonMenu.addEventListener('click', App._toggleMenuMobile());
   }
+
+  /*
+  _deleteWorkout() {
+    console.log(itemButtonDelete);
+  }
+
+  _deleteWorkoutClick() {
+    itemButtonDelete.addEventListener('click', App._deleteWorkout());
+  }
+  */
 }
 
 const app = new App();
