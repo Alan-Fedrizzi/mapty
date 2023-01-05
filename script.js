@@ -90,15 +90,11 @@ class App {
 
     formButtonCancel.addEventListener('click', this._cancelWorkout.bind(this));
 
-    document.addEventListener('keydown', this._cancelWorkout.bind(this));
-
     inputType.addEventListener('change', this._toggleElevationField);
 
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
 
     buttonMenu.addEventListener('click', this._toggleMenuMobile.bind(this));
-
-    document.addEventListener('keydown', this._toggleMenuMobile.bind(this));
   }
 
   _getPosition() {
@@ -260,15 +256,6 @@ class App {
     formButtonCancel.addEventListener('click', App._cancelWorkout());
   }
 
-  _cancelWorkoutEsc() {
-    document.addEventListener('keydown', this._cancelWorkout.bind(this));
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') {
-        App._cancelWorkout();
-      }
-    });
-  }
-
   _renderWorkoutMarker(workout) {
     // Display marker
     L.marker(workout.coords)
@@ -398,14 +385,46 @@ class App {
   _menuMobileClick() {
     buttonMenu.addEventListener('click', App._toggleMenuMobile());
   }
-
-  _menuMobileEsc() {
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') {
-        App._toggleMenuMobile();
-      }
-    });
-  }
 }
 
 const app = new App();
+
+// Esc key funcionality:
+const cancelWorkout = function () {
+  form.classList.add('hidden');
+  // Clear input fields
+  inputDistance.value =
+    inputDuration.value =
+    inputCadence.value =
+    inputElevation.value =
+      '';
+  // changing type ro running
+  if (inputType.value === 'cycling') {
+    inputType.value = 'running';
+    inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
+    inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+    formButtonSave.classList.toggle('btn--running');
+    formButtonSave.classList.toggle('btn--cycling');
+    formButtonCancel.classList.toggle('btn--running');
+    formButtonCancel.classList.toggle('btn--cycling');
+  }
+};
+
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') {
+    cancelWorkout();
+  }
+});
+
+const toggleMenuMobile = function () {
+  container.classList.toggle('container--menu-open');
+};
+
+document.addEventListener('keydown', function (e) {
+  if (
+    e.key === 'Escape' &&
+    container.classList.contains('container--menu-open')
+  ) {
+    toggleMenuMobile();
+  }
+});
