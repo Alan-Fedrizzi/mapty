@@ -60,6 +60,7 @@ class Cycling extends Workout {
 // APPLICATION ARCHITECTURE
 const form = document.querySelector('.form');
 const containerWorkouts = document.querySelector('.workouts');
+// const sidebar = document.querySelector('.sidebar');
 const inputType = document.querySelector('.form__input--type');
 const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
@@ -80,6 +81,8 @@ class App {
   #mapEvent;
   #workouts = [];
 
+  // _sidebar = document.querySelector('.sidebar');
+
   constructor() {
     // Get user's position
     this._getPosition();
@@ -97,6 +100,26 @@ class App {
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
 
     buttonMenu.addEventListener('click', this._toggleMenuMobile.bind(this));
+
+    // this._sidebar.addEventListener(
+    //   'click',
+    //   this._deleteWorkoutClick.bind(this)
+    // );
+
+    // sidebar.addEventListener('click', function (e) {
+    //   // console.log(e, e.target);
+    //   const itemButtonDelete = e.target.closest('#item-btn-delete');
+
+    //   if (!itemButtonDelete) return;
+
+    //   console.log('delete1234');
+
+    //   const listItem = e.target.closest('.workout');
+    //   const listItemID = listItem.dataset.id;
+    //   console.log(listItemID);
+
+    //   console.log(this.#workouts);
+    // });
 
     // itemButtonDelete.addEventListener('click', this._deleteWorkout.bind(this));
 
@@ -400,16 +423,32 @@ class App {
 
   /*
   _deleteWorkout() {
-    console.log(itemButtonDelete);
+    console.log('_deleteWorkout');
+    console.log(this.#workouts);
   }
 
   _deleteWorkoutClick() {
-    itemButtonDelete.addEventListener('click', App._deleteWorkout());
+    // const itemButtonsDelete = document.querySelectorAll('#item-btn-delete');
+    this._sidebar.addEventListener('click', function (e) {
+      // console.log(e, e.target);
+      const itemButtonDelete = e.target.closest('#item-btn-delete');
+
+      if (!itemButtonDelete) return;
+
+      console.log('delete1234');
+
+      const listItem = e.target.closest('.workout');
+      const listItemID = listItem.dataset.id;
+      console.log(listItemID);
+
+      console.log(this.#workouts);
+    });
   }
   */
 }
 
 const app = new App();
+// app._deleteWorkoutClick();
 
 // Esc key funcionality:
 const cancelWorkout = function () {
