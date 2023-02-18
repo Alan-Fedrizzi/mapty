@@ -3,7 +3,6 @@
 class Workout {
   date = new Date();
   id = (Date.now() + '').slice(-10);
-  // cria o id baseado na data, que vai ser única o suficiente, na prática não devemos fazer assim
 
   constructor(coords, distance, duration) {
     this.coords = coords; // [lat, lng]
@@ -60,7 +59,6 @@ class Cycling extends Workout {
 // APPLICATION ARCHITECTURE
 const form = document.querySelector('.form');
 const containerWorkouts = document.querySelector('.workouts');
-// const sidebar = document.querySelector('.sidebar');
 const inputType = document.querySelector('.form__input--type');
 const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
@@ -69,10 +67,6 @@ const inputElevation = document.querySelector('.form__input--elevation');
 const buttonMenu = document.querySelector('.button-menu');
 const container = document.querySelector('.container');
 const breakpointMd = 704;
-const formButtonSave = document.getElementById('form-btn-save');
-const formButtonCancel = document.getElementById('form-btn-cancel');
-// const itemButtonDelete = document.getElementById('#item-btn-delete');
-// const itemButtonEdit = document.getElementById('item-btn-edit');
 
 class App {
   // Private class field
@@ -80,8 +74,6 @@ class App {
   #mapZoomLevel = 13;
   #mapEvent;
   #workouts = [];
-
-  // _sidebar = document.querySelector('.sidebar');
 
   constructor() {
     // Get user's position
@@ -93,37 +85,11 @@ class App {
     // Attach event handlers
     form.addEventListener('submit', this._newWorkout.bind(this));
 
-    formButtonCancel.addEventListener('click', this._cancelWorkout.bind(this));
-
     inputType.addEventListener('change', this._toggleElevationField);
 
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
 
     buttonMenu.addEventListener('click', this._toggleMenuMobile.bind(this));
-
-    // this._sidebar.addEventListener(
-    //   'click',
-    //   this._deleteWorkoutClick.bind(this)
-    // );
-
-    // sidebar.addEventListener('click', function (e) {
-    //   // console.log(e, e.target);
-    //   const itemButtonDelete = e.target.closest('#item-btn-delete');
-
-    //   if (!itemButtonDelete) return;
-
-    //   console.log('delete1234');
-
-    //   const listItem = e.target.closest('.workout');
-    //   const listItemID = listItem.dataset.id;
-    //   console.log(listItemID);
-
-    //   console.log(this.#workouts);
-    // });
-
-    // itemButtonDelete.addEventListener('click', this._deleteWorkout.bind(this));
-
-    // itemButtonEdit.addEventListener('click', this.xxxxxxxxxxx.bind(this));
   }
 
   _getPosition() {
@@ -141,7 +107,6 @@ class App {
     console.log(position);
     const { latitude } = position.coords;
     const { longitude } = position.coords;
-    // console.log(`https://www.google.com.br/maps/@${latitude},${longitude}z`);
 
     const coords = [latitude, longitude];
 
@@ -254,37 +219,6 @@ class App {
     this._setLocalStorage();
   }
 
-  _newWorkoutClick() {
-    formButtonSave.addEventListener('click', App._newWorkout());
-  }
-
-  _cancelWorkout(e) {
-    e.preventDefault();
-    form.classList.add('hidden');
-    // Clear input fields
-    inputDistance.value =
-      inputDuration.value =
-      inputCadence.value =
-      inputElevation.value =
-        '';
-    // changing type ro running
-    if (inputType.value === 'cycling') {
-      inputType.value = 'running';
-      inputElevation
-        .closest('.form__row')
-        .classList.toggle('form__row--hidden');
-      inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
-      formButtonSave.classList.toggle('btn--running');
-      formButtonSave.classList.toggle('btn--cycling');
-      formButtonCancel.classList.toggle('btn--running');
-      formButtonCancel.classList.toggle('btn--cycling');
-    }
-  }
-
-  _cancelWorkoutClick() {
-    formButtonCancel.addEventListener('click', App._cancelWorkout());
-  }
-
   _renderWorkoutMarker(workout) {
     // Display marker
     L.marker(workout.coords)
@@ -333,13 +267,6 @@ class App {
           <span class="workout__value">${workout.cadence}</span>
           <span class="workout__unit">spm</span>
         </div>
-        <button class="workout__btn btn btn--${
-          workout.type
-        } btn--secondary" id="item-btn-delete">Delete</button>
-        <button class="workout__btn btn btn--${
-          workout.type
-        }" id="item-btn-edit">Edit</button>
-        ${workout.id}
       </li>`;
     }
 
@@ -355,13 +282,6 @@ class App {
           <span class="workout__value">${workout.elevationGain}</span>
           <span class="workout__unit">m</span>
         </div>
-        <button class="workout__btn btn btn--${
-          workout.type
-        } btn--secondary" id="item-btn-delete">Delete</button>
-        <button class="workout__btn btn btn--${
-          workout.type
-        }" id="item-btn-edit">Edit</button>
-        ${workout.id}
       </li>`;
     }
 
@@ -420,72 +340,6 @@ class App {
   _menuMobileClick() {
     buttonMenu.addEventListener('click', App._toggleMenuMobile());
   }
-
-  /*
-  _deleteWorkout() {
-    console.log('_deleteWorkout');
-    console.log(this.#workouts);
-  }
-
-  _deleteWorkoutClick() {
-    // const itemButtonsDelete = document.querySelectorAll('#item-btn-delete');
-    this._sidebar.addEventListener('click', function (e) {
-      // console.log(e, e.target);
-      const itemButtonDelete = e.target.closest('#item-btn-delete');
-
-      if (!itemButtonDelete) return;
-
-      console.log('delete1234');
-
-      const listItem = e.target.closest('.workout');
-      const listItemID = listItem.dataset.id;
-      console.log(listItemID);
-
-      console.log(this.#workouts);
-    });
-  }
-  */
 }
 
 const app = new App();
-// app._deleteWorkoutClick();
-
-// Esc key funcionality:
-const cancelWorkout = function () {
-  form.classList.add('hidden');
-  // Clear input fields
-  inputDistance.value =
-    inputDuration.value =
-    inputCadence.value =
-    inputElevation.value =
-      '';
-  // changing type ro running
-  if (inputType.value === 'cycling') {
-    inputType.value = 'running';
-    inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
-    inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
-    formButtonSave.classList.toggle('btn--running');
-    formButtonSave.classList.toggle('btn--cycling');
-    formButtonCancel.classList.toggle('btn--running');
-    formButtonCancel.classList.toggle('btn--cycling');
-  }
-};
-
-document.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape') {
-    cancelWorkout();
-  }
-});
-
-const toggleMenuMobile = function () {
-  container.classList.toggle('container--menu-open');
-};
-
-document.addEventListener('keydown', function (e) {
-  if (
-    e.key === 'Escape' &&
-    container.classList.contains('container--menu-open')
-  ) {
-    toggleMenuMobile();
-  }
-});
